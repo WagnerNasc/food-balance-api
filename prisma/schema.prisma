@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ROLE {
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         String
+  birthDate    DateTime  @map("birth_date")
+  height       Decimal?
+  weight       Decimal?
+  updatedAt    DateTime? @updatedAt
+  createdAt    DateTime  @default(now()) @map("created_at")
+  Meal         Meal[]
+
+  @@map("user")
+}
+
+model Meal {
+  id        String    @id @default(uuid())
+  name      String
+  time      DateTime?
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  foodId    String    @map("food_id")
+  food      Food      @relation(fields: [foodId], references: [id])
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now()) @map("created_at")
+}
+
+model Food {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  carb        Decimal?
+  protein     Decimal?
+  fat         Decimal?
+  brandId     String    @map("brand_id")
+  food        Brand     @relation(fields: [brandId], references: [id])
+  updatedAt   DateTime? @updatedAt
+  createdAt   DateTime  @default(now()) @map("created_at")
+  Meal        Meal[]
+}
+
+model Brand {
+  id        String    @id @default(uuid())
+  name      String
+  cnpj      String    @unique
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now()) @map("created_at")
+  Food      Food[]
+}
