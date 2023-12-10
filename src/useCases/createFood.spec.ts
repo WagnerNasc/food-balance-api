@@ -1,5 +1,4 @@
 import { expect, it, beforeEach, describe } from '@jest/globals'
-import { UUID, randomUUID } from 'crypto'
 import { CreateFoodUseCase } from './createFood'
 import { InMemoryFoodRepository } from '@/repositories/in-memory/inMemoryFoodRespository'
 import { InMemoryBrandRepository } from '@/repositories/in-memory/inMemoryBrandRespository'
